@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://activemq.apache.org/schema/core
+    http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
+    
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- 连接的服务器地址和端口 -->
+		<property name="brokerURL" value="${mq.url}"></property>
+		<property name="userName" value="${mq.username}"></property>
+		<property name="password" value="${mq.password}"></property>
+		 <!-- <property name="useCompression" value="true"></property> -->
+	</bean>
+	
+	<bean id="jmsExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="keepAliveSeconds" value="30" />
+		<property name="maxPoolSize" value="1000" />
+		<property name="queueCapacity" value="10" />
+	</bean>
+	
+	<bean id="destination_stats_data" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="stats_xxxx_data" />
+	</bean>
+
+	<bean id="listenerAdapter_stats_data" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<property name="delegate" ref="mqJsonData"></property>
+		<property name="defaultListenerMethod" value="onMessage"></property>
+		<!-- 设置接收消息后的自动给目的地返回消息 -->
+		<!-- <property name="defaultResponseDestination" ref=""></property> -->
+	</bean>
+	<bean id="listenerContain_stats_data" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="destination_stats_data" />
+		<property name="messageListener" ref="listenerAdapter_stats_data"></property>
+		<property name="taskExecutor" ref="jmsExecutor"></property>
+		<!-- 最大并发消费者数目 -->
+		<property name="maxConcurrentConsumers" value="${mq.maxConcurrentConsumers}"></property>
+		<property name="concurrentConsumers" value="${mq.concurrentConsumers}"></property>
+		<!-- 最大空闲的消费者数目 -->
+		<property name="idleConsumerLimit" value="${mq.idleConsumerLimit}"></property>
+	</bean>
+	
+	<bean id="mqJsonData" class="com.love320.stats.listener.MQJsonData">
+	</bean>
+
+
+	<!-- stats_xxxx End -->
+	
+	
+	
+</beans>
