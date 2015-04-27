@@ -18,6 +18,7 @@ import com.love320.stats.filter.Zbase;
 import com.love320.stats.handler.Handler;
 import com.love320.stats.handler.HandlerService;
 import com.love320.stats.storage.impl.LocalJVMData;
+import com.love320.stats.task.TaskService;
 
 /**
  * 初始化配置信息
@@ -36,6 +37,9 @@ public class InitApp {
 	
 	@Autowired
 	private LocalJVMData localJVMData;
+	
+	@Autowired
+	private TaskService taskService;
 
 	@PostConstruct
 	public boolean initConfig() {
@@ -49,6 +53,7 @@ public class InitApp {
 			handler.setFilterService(filterService);
 			filterService.add(sing, filters(sing));//加入过滤器
 			handlerService.add(handler);//加入处理器
+			taskService.add(sing, localJVMData);//统计结果持久化
 		}
 		
 		return true;
@@ -96,6 +101,7 @@ public class InitApp {
 		config.setValue("calcCount");
 		String[] columns = { "S:mid", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
+		config.setCron("0/9 * * * * ?");
 		return config;
 	}
 	
@@ -111,6 +117,7 @@ public class InitApp {
 		config.setValue("mid");
 		String[] columns = { "S:mid", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
+		config.setCron("0/45 * * * * ?");
 		return config;
 	}
 	

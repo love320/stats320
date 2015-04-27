@@ -22,12 +22,39 @@ public class ConcatUtil {
 		StringBuilder sb = new StringBuilder();
 		sb.append(config.getIndex());//加入头
 		for(String sing:columns){
-			String[] strs = StringUtils.split(sing, ":");
+			String[] strs = StringUtils.split(sing, Constant.COLONS);
 			if(strs.length == 2){
 				sb.append(Constant.POUND).append(sing).append(Constant.COLON).append(map.get(strs[1]));
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * 生成数据库的key
+	 * @param config
+	 * @return
+	 */
+	public static String dbkey(Config config){
+		return dbkey(config,config.isMaster());
+	}
+	
+	/**
+	 * 非活动的数据库的key
+	 * @param config
+	 * @return
+	 */
+	public static String undbkey(Config config){
+		return dbkey(config,!config.isMaster());
+	}
+	
+	/**
+	 * 生成数据库的key
+	 * @param config
+	 * @return
+	 */
+	public static String dbkey(Config config,boolean isMaster){
+		return String.format("%s%d", config.getIndex(),isMaster?1:2);
 	}
 
 }

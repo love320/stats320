@@ -53,6 +53,12 @@ public class Config {
 	 * 主存储-备存储
 	 */
 	private boolean master;
+	
+	/**
+	 * 获取信息时间Cron
+	 * @return
+	 */
+	private String cron;
 
 	public List<String> getFilters() {
 		return filters;
@@ -104,6 +110,14 @@ public class Config {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public String getCron() {
+		return cron;
+	}
+
+	public void setCron(String cron) {
+		this.cron = cron;
 	}
 	
 	

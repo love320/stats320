@@ -1,8 +1,11 @@
 package com.love320.stats.storage.impl;
 
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.springframework.stereotype.Service;
+
 import com.love320.stats.storage.IStorage;
 
 @Service
@@ -101,6 +104,15 @@ public class LocalJVMData implements IStorage {
 		return true;
 	}
 
-
+	public String[] keys(String database){
+		ConcurrentHashMap<String,Object> data = getDatabase(database);
+		String[] keys = new String[data.size()];
+		int i = 0;
+		for (Entry<String, Object> entry : data.entrySet()){
+			keys[i] = entry.getKey();
+			i++;
+		}
+		return keys;
+	}
 
 }
