@@ -20,7 +20,7 @@ public class ConcatUtil {
 	public static String key(Config config,Map<String,Object> map){
 		List<String> columns = config.getColumns();
 		StringBuilder sb = new StringBuilder();
-		sb.append(config.getIndex());//加入头
+		sb.append(dbkey(config));//加入头,数据库
 		for(String sing:columns){
 			String[] strs = StringUtils.split(sing, Constant.COLONS);
 			if(strs.length == 2){
@@ -54,7 +54,7 @@ public class ConcatUtil {
 	 * @return
 	 */
 	public static String dbkey(Config config,boolean isMaster){
-		return String.format("%s%d", config.getIndex(),isMaster?1:2);
+		return String.format("db#%s#%d", config.getIndex(),isMaster?1:2);
 	}
 
 }

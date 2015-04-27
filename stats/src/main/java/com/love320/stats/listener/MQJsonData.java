@@ -19,8 +19,6 @@ public class MQJsonData {
 	private ObjectMapper mapper = new ObjectMapper();  
 	
 	public void onMessage(String message) {
-		System.out.println(message);
-		
 		try {
 			server.read(mapper.readValue(message,Map.class));//转成map
 		} catch (JsonParseException e) {

@@ -18,6 +18,7 @@ import com.love320.stats.filter.Zbase;
 import com.love320.stats.handler.Handler;
 import com.love320.stats.handler.HandlerService;
 import com.love320.stats.storage.impl.LocalJVMData;
+import com.love320.stats.storage.impl.MysqlDataBase;
 import com.love320.stats.task.TaskService;
 
 /**
@@ -40,6 +41,9 @@ public class InitApp {
 	
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private MysqlDataBase mysqlDataBase;
 
 	@PostConstruct
 	public boolean initConfig() {
@@ -53,7 +57,7 @@ public class InitApp {
 			handler.setFilterService(filterService);
 			filterService.add(sing, filters(sing));//加入过滤器
 			handlerService.add(handler);//加入处理器
-			taskService.add(sing, localJVMData);//统计结果持久化
+			taskService.add(sing, localJVMData,mysqlDataBase);//统计结果持久化
 		}
 		
 		return true;
@@ -115,7 +119,7 @@ public class InitApp {
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(true);
 		config.setValue("mid");
-		String[] columns = { "S:mid", "S:appId" };
+		String[] columns = { "S:channel", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/45 * * * * ?");
 		return config;

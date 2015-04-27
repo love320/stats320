@@ -92,13 +92,6 @@ public class Config {
 		this.type = type;
 	}
 
-	public boolean isMaster() {
-		return master;
-	}
-
-	public void setMaster(boolean master) {
-		this.master = master;
-	}
 
 	public String getIndex() {
 		return index;
@@ -118,6 +111,14 @@ public class Config {
 
 	public void setCron(String cron) {
 		this.cron = cron;
+	}
+
+	public boolean isMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
 	}
 	
 	
