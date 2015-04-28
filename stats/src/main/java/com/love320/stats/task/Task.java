@@ -5,6 +5,8 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.love320.stats.core.Config;
 import com.love320.stats.storage.IDataBase;
@@ -18,6 +20,8 @@ import com.love320.stats.utils.ConcatUtil;
  *
  */
 public class Task  implements Job {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Task.class);
 	
 	/**
 	 * 配置信息
@@ -45,9 +49,9 @@ public class Task  implements Job {
 		
 		String[] keys = storage.keys(ConcatUtil.undbkey(config));
 		for(String sing:keys){
-			System.out.println("key:"+sing);
-			if(config.isIsize() == false) System.out.println("vp.value:"+storage.getInt(ConcatUtil.undbkey(config), sing));
-			if(config.isIsize() == true) System.out.println("up.value:"+storage.getStringSize(ConcatUtil.undbkey(config), sing));
+			logger.info("key:"+sing);
+			if(config.isIsize() == false) logger.info("vp.value:"+storage.getInt(ConcatUtil.undbkey(config), sing));
+			if(config.isIsize() == true) logger.info("up.value:"+storage.getStringSize(ConcatUtil.undbkey(config), sing));
 			dataBase.write("stats", null);
 		}
 		

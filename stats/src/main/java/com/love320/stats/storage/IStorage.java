@@ -16,7 +16,7 @@ public interface IStorage {
 	 * @param value
 	 * @return
 	 */
-	public boolean setInt(String database,String key,int value);
+	public boolean setInt(String database,String key,Integer value);
 	
 	/**
 	 * 获取整形的对象

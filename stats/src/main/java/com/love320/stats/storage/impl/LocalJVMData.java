@@ -4,12 +4,16 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.love320.stats.storage.IStorage;
 
 @Service
 public class LocalJVMData implements IStorage {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LocalJVMData.class);
 	
 	private ConcurrentHashMap<String,Object> database = new ConcurrentHashMap<String,Object>();
 	
@@ -50,15 +54,17 @@ public class LocalJVMData implements IStorage {
 		return link;
 	}
 	
+	private int num = 0;
 	
 	/**
 	 * 设置指定数据库的key的对应值
 	 */
-	public boolean setInt(String database, String key, int value) {
+	public boolean setInt(String database, String key, Integer value) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
 		ConcurrentLinkedQueue<Integer> link = getIntValue(data,key);
 		synchronized(link){
-			link.add(value);
+			link.offer(value.intValue());
+			//logger.info(String.format(" %d ", ++num));
 		}
 		return false;
 	}
@@ -69,8 +75,13 @@ public class LocalJVMData implements IStorage {
 	public int getInt(String database, String key) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
 		ConcurrentLinkedQueue<Integer> link = getIntValue(data,key);
+		//logger.info(String.format("size: %d ", link.size()));
 		Integer num = 0;
-		for(Integer sing:link) num +=sing;
+		synchronized(link){
+			while (!link.isEmpty()) {
+	            num +=link.poll();
+	        }
+		}
 		return num.intValue();
 	}
 	
