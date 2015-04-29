@@ -50,7 +50,7 @@ public class Task  implements Job {
 		String[] keys = storage.keys(ConcatUtil.undbkey(config));
 		for(String sing:keys){
 			//if(config.isIsize() == false) logger.info("vp.value:"+storage.getInt(ConcatUtil.undbkey(config), sing));
-			if(config.isIsize() == true) logger.info("up.value:"+storage.getStringSize(ConcatUtil.undbkey(config), sing));
+			//if(config.isIsize() == true) logger.info("up.value:"+storage.getStringSize(ConcatUtil.undbkey(config), sing));
 			dataBase.write("stats", null);//持久化保存
 		}
 		
