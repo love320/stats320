@@ -10,7 +10,7 @@ public class ZInteger implements Zbase {
 	}
 
 	public boolean isValid(Object obj) {
-		return true;
+		return obj == null;
 	}
 
 	public String name() {

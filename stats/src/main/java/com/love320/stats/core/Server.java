@@ -25,7 +25,7 @@ public class Server {
 	
 	public boolean read(Map<String,Object> map){
 		map.put(Constant.KEYMSG, UUID.randomUUID().toString());//给每一条信息打上标注
-		for(Handler sing:handlerService.handlers()) sing.exe(map);
+		for(Handler handler:handlerService.handlers()) handler.exe(map);
 		return true;
 	}
 

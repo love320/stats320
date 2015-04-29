@@ -103,7 +103,7 @@ public class InitApp {
 	 */
 	private Config configPv10() {
 		Config config = new Config();
-		String[] filters = { "S:mid", "S:version", "S:appId" };// 过滤字段
+		String[] filters = { "S:mid", "S:version", "S:appId", "I:calcCount" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(false);
 		config.setValue("calcCount");
