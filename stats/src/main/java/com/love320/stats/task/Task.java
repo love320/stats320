@@ -7,7 +7,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.love320.stats.core.Config;
 import com.love320.stats.storage.IDataBase;
 import com.love320.stats.storage.IStorage;

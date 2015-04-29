@@ -62,7 +62,7 @@ public class ConcatUtil {
 	public static Map<String,Object> keyToMap(String key){
 		//b8a3-4696-b60e-60135bdc9af2#2#S:mid:ssid1bcacb7f6decdab1#S:appId:APPWALL
 		Map<String,Object> dataMap = new HashMap<String, Object>();
-		dataMap.put("dtk", key);//数据key
+		//dataMap.put("dtk", key);//数据key
 		String[] keys = StringUtils.split(key,Constant.POUND);
 		if(keys.length >= 3){
 			for(int i = 0;i<keys.length;i++){

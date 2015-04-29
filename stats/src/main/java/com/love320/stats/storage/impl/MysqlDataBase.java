@@ -1,14 +1,14 @@
 package com.love320.stats.storage.impl;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.annotation.Resource;
-
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
 import com.love320.stats.storage.IDataBase;
 import com.love320.stats.utils.SQLUtil;
@@ -24,7 +24,10 @@ public class MysqlDataBase implements IDataBase {
 	
 	public boolean write(String table, Map<String, Object> data,int value) {
 		//logger.info(String.format("写入数据成功!-%s", table));
-		
+		Calendar calendar = Calendar.getInstance();
+		data.put("date", DateFormatUtils.ISO_DATE_FORMAT.format(calendar));
+		data.put("hour", Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
+		data.put("minute", Integer.valueOf(calendar.get(Calendar.MINUTE)));
 		data.put("value", value);
 		
 		StringBuffer names = new StringBuffer();

@@ -103,11 +103,11 @@ public class InitApp {
 	 */
 	private Config configPv10() {
 		Config config = new Config();
-		String[] filters = { "S:mid", "S:appId" };// 过滤字段
+		String[] filters = { "S:mid", "S:version", "S:appId" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(false);
 		config.setValue("calcCount");
-		String[] columns = { "S:channel","S:mid", "S:appId" };
+		String[] columns = { "S:channel", "S:version", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/15 * * * * ?");
 		config.setSleep(3000);
