@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +32,8 @@ import com.love320.stats.task.TaskService;
 @Service
 public class InitApp {
 	
+	private static final Logger logger = LoggerFactory.getLogger(InitApp.class);
+	
 	@Autowired
 	private FilterService filterService;
 	
@@ -47,7 +51,7 @@ public class InitApp {
 
 	@PostConstruct
 	public boolean initConfig() {
-		System.out.println("初始化配置信息...");
+		logger.info("初始化配置信息...");
 		
 		// 获取配置信息
 		List<Config> configs = configList();
@@ -105,7 +109,7 @@ public class InitApp {
 		config.setValue("calcCount");
 		String[] columns = { "S:mid", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
-		config.setCron("0/9 * * * * ?");
+		config.setCron("0/15 * * * * ?");
 		return config;
 	}
 	

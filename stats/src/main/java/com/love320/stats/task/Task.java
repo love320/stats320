@@ -44,7 +44,7 @@ public class Task  implements Job {
 		
 		//程序休息一下.等待完成更换数据库成功.
 		try { 
-			Thread.sleep (1000) ; 
+			Thread.sleep (3000) ; 
 		} catch (InterruptedException ie){}
 		
 		String[] keys = storage.keys(ConcatUtil.undbkey(config));

@@ -54,18 +54,13 @@ public class LocalJVMData implements IStorage {
 		return link;
 	}
 	
-	private int num = 0;
-	
 	/**
 	 * 设置指定数据库的key的对应值
 	 */
 	public boolean setInt(String database, String key, Integer value) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
 		ConcurrentLinkedQueue<Integer> link = getIntValue(data,key);
-		synchronized(link){
-			link.offer(value.intValue());
-			//logger.info(String.format(" %d ", ++num));
-		}
+		link.offer(value);
 		return false;
 	}
 
@@ -75,7 +70,6 @@ public class LocalJVMData implements IStorage {
 	public int getInt(String database, String key) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
 		ConcurrentLinkedQueue<Integer> link = getIntValue(data,key);
-		//logger.info(String.format("size: %d ", link.size()));
 		Integer num = 0;
 		synchronized(link){
 			while (!link.isEmpty()) {
