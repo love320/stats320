@@ -110,6 +110,7 @@ public class InitApp {
 		String[] columns = { "S:mid", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/15 * * * * ?");
+		config.setSleep(3200);
 		return config;
 	}
 	
@@ -125,7 +126,7 @@ public class InitApp {
 		config.setValue("mid");
 		String[] columns = { "S:channel", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
-		config.setCron("0/45 * * * * ?");
+		config.setCron("0/12 * * * * ?");
 		return config;
 	}
 	

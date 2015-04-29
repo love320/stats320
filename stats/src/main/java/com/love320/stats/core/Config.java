@@ -59,6 +59,11 @@ public class Config {
 	 * @return
 	 */
 	private String cron;
+	
+	/**
+	 * 获取信息前暂停时间,作用是使用活动数据库完全变为非活动数据库
+	 */
+	private int sleep = 3000;
 
 	public List<String> getFilters() {
 		return filters;
@@ -119,6 +124,14 @@ public class Config {
 
 	public void setMaster(boolean master) {
 		this.master = master;
+	}
+
+	public int getSleep() {
+		return sleep;
+	}
+
+	public void setSleep(int sleep) {
+		this.sleep = sleep;
 	}
 	
 	

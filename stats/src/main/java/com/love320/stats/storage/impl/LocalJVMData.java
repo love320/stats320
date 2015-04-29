@@ -95,12 +95,7 @@ public class LocalJVMData implements IStorage {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
 		ConcurrentHashMap<String,String> hashmap = getStringValue(data,key);
 		String sing = hashmap.get(value);
-		if(sing == null ) {
-			synchronized(hashmap){
-				hashmap.put(value, value);
-			}
-		}
-		
+		if(sing == null ) hashmap.put(value, value);
 		return true;
 	}
 

@@ -44,15 +44,14 @@ public class Task  implements Job {
 		
 		//程序休息一下.等待完成更换数据库成功.
 		try { 
-			Thread.sleep (3000) ; 
+			Thread.sleep (config.getSleep()) ; 
 		} catch (InterruptedException ie){}
 		
 		String[] keys = storage.keys(ConcatUtil.undbkey(config));
 		for(String sing:keys){
-			logger.info("key:"+sing);
-			if(config.isIsize() == false) logger.info("vp.value:"+storage.getInt(ConcatUtil.undbkey(config), sing));
+			//if(config.isIsize() == false) logger.info("vp.value:"+storage.getInt(ConcatUtil.undbkey(config), sing));
 			if(config.isIsize() == true) logger.info("up.value:"+storage.getStringSize(ConcatUtil.undbkey(config), sing));
-			dataBase.write("stats", null);
+			dataBase.write("stats", null);//持久化保存
 		}
 		
 		//任务完成,清空非活动数据库
