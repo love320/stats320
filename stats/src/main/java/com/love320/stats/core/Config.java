@@ -64,6 +64,12 @@ public class Config {
 	 * 获取信息前暂停时间,作用是使用活动数据库完全变为非活动数据库
 	 */
 	private int sleep = 3000;
+	
+	/**
+	 * 持久存储的表
+	 * @return
+	 */
+	private String table;
 
 	public List<String> getFilters() {
 		return filters;
@@ -132,6 +138,14 @@ public class Config {
 
 	public void setSleep(int sleep) {
 		this.sleep = sleep;
+	}
+
+	public String getTable() {
+		return table;
+	}
+
+	public void setTable(String table) {
+		this.table = table;
 	}
 	
 	

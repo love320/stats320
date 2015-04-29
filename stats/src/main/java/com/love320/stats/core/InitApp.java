@@ -107,10 +107,11 @@ public class InitApp {
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(false);
 		config.setValue("calcCount");
-		String[] columns = { "S:mid", "S:appId" };
+		String[] columns = { "S:channel","S:mid", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/15 * * * * ?");
-		config.setSleep(3200);
+		config.setSleep(3000);
+		config.setTable("statsTables_PV");
 		return config;
 	}
 	
@@ -127,6 +128,8 @@ public class InitApp {
 		String[] columns = { "S:channel", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/12 * * * * ?");
+		config.setSleep(3000);
+		config.setTable("statsTables_UV");
 		return config;
 	}
 	

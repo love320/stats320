@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface IDataBase {
 	
-	public boolean write(String table,Map<String,Object> data);
+	public boolean write(String table,Map<String,Object> data,int value);
 
 }
