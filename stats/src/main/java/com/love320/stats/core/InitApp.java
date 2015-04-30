@@ -107,6 +107,7 @@ public class InitApp {
 		List<Config> cs = new ArrayList<Config>();
 		cs.add(configPv10());// 统计pv 10分钟
 		cs.add(configPvSrc10());// 叠加统计configPv10
+		cs.add(configPvSrcMin());
 		cs.add(configUv30());// 统计uv 30分钟
 		return cs;
 	}
@@ -147,6 +148,22 @@ public class InitApp {
 		config.setCron("0/50 * * * * ?");
 		config.setSleep(3000);
 		config.setTable("statsTables_PV_hour");
+		return config;
+	}
+	
+	private Config configPvSrcMin() {
+		Config config = new Config();
+		config.setIndex("VHX9Nr22");
+		config.setSrcIndex("BPqlPV4N");
+		String[] filters = { "S:BPqlPV4N"};// 过滤字段
+		config.setFilters(Arrays.asList(filters));
+		config.setIsize(false);
+		config.setValue("value");
+		String[] columns = { "S:channel", "S:version", "S:appId" };
+		config.setColumns(Arrays.asList(columns));
+		config.setCron("2 0/2 * * * ?");
+		config.setSleep(3000);
+		config.setTable("statsTables_PV_Min");
 		return config;
 	}
 	
