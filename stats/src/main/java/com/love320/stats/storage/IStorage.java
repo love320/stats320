@@ -9,6 +9,7 @@ package com.love320.stats.storage;
 public interface IStorage {
 	
 
+	public boolean initDB(String database);
 	/**
 	 * 设置整形的对象
 	 * @param database

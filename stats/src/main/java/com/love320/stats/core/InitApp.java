@@ -22,6 +22,7 @@ import com.love320.stats.handler.HandlerService;
 import com.love320.stats.storage.impl.LocalJVMData;
 import com.love320.stats.storage.impl.MysqlDataBase;
 import com.love320.stats.task.TaskService;
+import com.love320.stats.utils.ConcatUtil;
 
 /**
  * 初始化配置信息
@@ -57,7 +58,11 @@ public class InitApp {
 		List<Config> configs = configList();
 		for(Config sing:configs){
 			Handler handler = new Handler(sing);
+			
+			localJVMData.initDB(ConcatUtil.undbkey(sing));
+			localJVMData.initDB(ConcatUtil.dbkey(sing));
 			handler.setStorage(localJVMData);
+			
 			handler.setFilterService(filterService);
 			filterService.add(sing, filters(sing));//加入过滤器
 			handlerService.add(handler);//加入处理器

@@ -17,6 +17,10 @@ public class LocalJVMData implements IStorage {
 	
 	private ConcurrentHashMap<String,Object> database = new ConcurrentHashMap<String,Object>();
 	
+	public boolean initDB(String database) {
+		return initDatabase(database) == null;
+	}
+	
 	/**
 	 * 初始数据库
 	 * @param index
