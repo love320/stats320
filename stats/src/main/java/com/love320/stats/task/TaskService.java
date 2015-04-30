@@ -17,6 +17,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Service;
 
 import com.love320.stats.core.Config;
+import com.love320.stats.storage.IAfter;
 import com.love320.stats.storage.IDataBase;
 import com.love320.stats.storage.IStorage;
 
@@ -47,11 +48,12 @@ public class TaskService {
 	}
 	
 	
-	public boolean add(Config config,IStorage storage,IDataBase database){
+	public boolean add(Config config,IStorage storage,IDataBase database,IAfter after){
 		JobDataMap jobdataMap = new JobDataMap();
 		jobdataMap.put("config", config);
 		jobdataMap.put("storage", storage);
 		jobdataMap.put("database",database);
+		jobdataMap.put("after",after);
 		JobDetail job = JobBuilder.newJob(Task.class)
 				.withIdentity(String.format("%s-Job",config.getIndex()), "groupJob")
 				.usingJobData(jobdataMap)

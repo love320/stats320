@@ -1,14 +1,18 @@
 package com.love320.stats.core;
 
 import java.util.List;
-import java.util.UUID;
 
 public class Config {
 	
 	/**
 	 * 唯一标注索引
 	 */
-	private final String index = UUID.randomUUID().toString();
+	private String index;
+	
+	/**
+	 * 取上"index"结果中再处理
+	 */
+	private String srcIndex;
 	
 	/**
 	 * 过滤名称组
@@ -146,6 +150,18 @@ public class Config {
 
 	public void setTable(String table) {
 		this.table = table;
+	}
+
+	public void setIndex(String index) {
+		this.index = index;
+	}
+
+	public String getSrcIndex() {
+		return srcIndex;
+	}
+
+	public void setSrcIndex(String srcIndex) {
+		this.srcIndex = srcIndex;
 	}
 	
 	

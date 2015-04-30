@@ -1,9 +1,12 @@
 package com.love320.stats.storage.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.annotation.Resource;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +25,10 @@ public class MysqlDataBase implements IDataBase {
 	private JdbcTemplate jdbcTemplate;
 	
 	
-	public boolean write(String table, Map<String, Object> data,int value) {
+	public boolean write(long millis,String table, Map<String, Object> data,int value) {
 		//logger.info(String.format("写入数据成功!-%s", table));
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();//时间
+		calendar.setTimeInMillis(millis);//设置时间
 		data.put("date", DateFormatUtils.ISO_DATE_FORMAT.format(calendar));
 		data.put("hour", Integer.valueOf(calendar.get(Calendar.HOUR_OF_DAY)));
 		data.put("minute", Integer.valueOf(calendar.get(Calendar.MINUTE)));

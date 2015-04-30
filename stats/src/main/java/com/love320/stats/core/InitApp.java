@@ -7,11 +7,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.love320.stats.filter.FilterService;
 import com.love320.stats.filter.ZInteger;
@@ -19,6 +19,7 @@ import com.love320.stats.filter.ZString;
 import com.love320.stats.filter.Zbase;
 import com.love320.stats.handler.Handler;
 import com.love320.stats.handler.HandlerService;
+import com.love320.stats.storage.impl.AfterService;
 import com.love320.stats.storage.impl.LocalJVMData;
 import com.love320.stats.storage.impl.MysqlDataBase;
 import com.love320.stats.task.TaskService;
@@ -49,6 +50,9 @@ public class InitApp {
 	
 	@Autowired
 	private MysqlDataBase mysqlDataBase;
+	
+	@Autowired
+	private AfterService afterService;
 
 	@PostConstruct
 	public boolean initConfig() {
@@ -56,6 +60,7 @@ public class InitApp {
 		
 		// 获取配置信息
 		List<Config> configs = configList();
+		
 		for(Config sing:configs){
 			Handler handler = new Handler(sing);
 			
@@ -66,7 +71,10 @@ public class InitApp {
 			handler.setFilterService(filterService);
 			filterService.add(sing, filters(sing));//加入过滤器
 			handlerService.add(handler);//加入处理器
-			taskService.add(sing, localJVMData,mysqlDataBase);//统计结果持久化
+			taskService.add(sing, localJVMData,mysqlDataBase,afterService);//统计结果持久化
+			
+			//检查是否有后处理
+			if(!StringUtils.isBlank(sing.getSrcIndex())) afterService.addSrcIndex(sing.getSrcIndex());
 		}
 		
 		return true;
@@ -98,6 +106,7 @@ public class InitApp {
 	private List<Config> configList() {
 		List<Config> cs = new ArrayList<Config>();
 		cs.add(configPv10());// 统计pv 10分钟
+		cs.add(configPvSrc10());// 叠加统计configPv10
 		cs.add(configUv30());// 统计uv 30分钟
 		return cs;
 	}
@@ -108,6 +117,7 @@ public class InitApp {
 	 */
 	private Config configPv10() {
 		Config config = new Config();
+		config.setIndex("jWhn48iO");
 		String[] filters = { "S:mid", "S:version", "S:appId", "I:calcCount" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(false);
@@ -121,18 +131,39 @@ public class InitApp {
 	}
 	
 	/**
+	 * 统计pv 10分钟
+	 * @return
+	 */
+	private Config configPvSrc10() {
+		Config config = new Config();
+		config.setIndex("BPqlPV4N");
+		config.setSrcIndex("jWhn48iO");
+		String[] filters = { "S:jWhn48iO"};// 过滤字段
+		config.setFilters(Arrays.asList(filters));
+		config.setIsize(false);
+		config.setValue("value");
+		String[] columns = { "S:channel", "S:version", "S:appId" };
+		config.setColumns(Arrays.asList(columns));
+		config.setCron("0/50 * * * * ?");
+		config.setSleep(3000);
+		config.setTable("statsTables_PV_hour");
+		return config;
+	}
+	
+	/**
 	 * 统计uv 30分钟
 	 * @return
 	 */
 	private Config configUv30() {
 		Config config = new Config();
+		config.setIndex("i5ZjweSq");
 		String[] filters = { "S:mid", "S:appId" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
 		config.setIsize(true);
 		config.setValue("mid");
 		String[] columns = { "S:channel", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
-		config.setCron("0/12 * * * * ?");
+		config.setCron("0/20 * * * * ?");
 		config.setSleep(3000);
 		config.setTable("statsTables_UV");
 		return config;

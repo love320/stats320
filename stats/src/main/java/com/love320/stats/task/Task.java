@@ -1,15 +1,22 @@
 package com.love320.stats.task;
 
 
+import java.util.Calendar;
+import java.util.Map;
+
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.love320.stats.core.Config;
+import com.love320.stats.storage.IAfter;
 import com.love320.stats.storage.IDataBase;
 import com.love320.stats.storage.IStorage;
+import com.love320.stats.utils.CommonUtil;
 import com.love320.stats.utils.ConcatUtil;
 
 
@@ -37,8 +44,13 @@ public class Task  implements Job {
 	 */
 	private IDataBase dataBase = null;
 	
+	/**
+	 * 后处理
+	 */
+	private IAfter afterService;
+	
 	private void exe(){
-		
+		long millis = System.currentTimeMillis();//时间
 		config.setMaster(!config.isMaster());//更换数据库
 		
 		//程序休息一下.等待完成更换数据库成功.
@@ -51,7 +63,9 @@ public class Task  implements Job {
 			int value = 0;
 			if(config.isIsize() == false) value = storage.getInt(ConcatUtil.undbkey(config), sing);//返回以整数统计信息值
 			if(config.isIsize() == true) value = storage.getStringSize(ConcatUtil.undbkey(config), sing);//返回以字符串统计总数的值
-			dataBase.write(config.getTable(),ConcatUtil.keyToMap(sing),value);//持久化保存
+			Map<String,Object> dataMap = ConcatUtil.keyToMap(sing);//读取key信息生成map对象
+			dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
+			afterService.processor(millis,config,CommonUtil.copyMap(dataMap), value);//后处理
 		}
 		
 		//任务完成,清空非活动数据库
@@ -63,6 +77,7 @@ public class Task  implements Job {
 		if(config == null) config = (Config) jobdataMap.get("config");
 		if(storage == null) storage = (IStorage) jobdataMap.get("storage");
 		if(dataBase == null) dataBase = (IDataBase) jobdataMap.get("database");
+		if(afterService == null) afterService = (IAfter) jobdataMap.get("after");
 		exe();//执行任务
 	}
 

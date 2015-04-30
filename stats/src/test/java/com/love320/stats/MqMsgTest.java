@@ -16,9 +16,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
+import com.love320.stats.utils.CommonUtil;
+
 import junit.framework.TestCase;
 
 public class MqMsgTest extends TestCase {
+	
+	
+	public void commonUtilTest(){
+		for(int i = 0 ;i < 200;i++) System.out.println(CommonUtil.generateShortUuid());
+	}
 	
 	public void sendTest(){
 		ApplicationContext  context = new ClassPathXmlApplicationContext("classpath:spring-root.xml");

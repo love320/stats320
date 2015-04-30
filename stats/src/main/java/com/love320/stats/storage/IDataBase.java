@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface IDataBase {
 	
-	public boolean write(String table,Map<String,Object> data,int value);
+	public boolean write(long millis,String table,Map<String,Object> data,int value);
 
 }

@@ -20,7 +20,8 @@ public class MQJsonData {
 	
 	public void onMessage(String message) {
 		try {
-			server.read(mapper.readValue(message,Map.class));//转成map
+			Map<String,Object> map = mapper.readValue(message,Map.class);
+			server.read(map);//转成map
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
