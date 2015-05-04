@@ -42,7 +42,7 @@ public class MysqlDataBase implements IDataBase {
 		}
 		
 		String insertSQL = String.format("insert into %s (%s) VALUES (%s) ", table,names,values);
-		logger.info(insertSQL);
+		//logger.info(insertSQL);
 		jdbcTemplate.update(insertSQL);
 		return false;
 	}

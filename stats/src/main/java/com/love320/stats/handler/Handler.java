@@ -4,14 +4,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.love320.stats.core.Config;
 import com.love320.stats.filter.FilterService;
 import com.love320.stats.filter.Zbase;
 import com.love320.stats.storage.IStorage;
+import com.love320.stats.task.Task;
 import com.love320.stats.utils.ConcatUtil;
 
 public class Handler {
 	
+	private static final Logger logger = LoggerFactory.getLogger(Handler.class);
 	
 	/**
 	 * 唯一标注索引

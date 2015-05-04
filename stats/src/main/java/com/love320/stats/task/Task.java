@@ -1,7 +1,6 @@
 package com.love320.stats.task;
 
 
-import java.util.Calendar;
 import java.util.Map;
 
 import org.quartz.Job;
@@ -10,7 +9,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.love320.stats.core.Config;
 import com.love320.stats.storage.IAfter;
@@ -64,6 +62,7 @@ public class Task  implements Job {
 			if(config.isIsize() == false) value = storage.getInt(ConcatUtil.undbkey(config), sing);//返回以整数统计信息值
 			if(config.isIsize() == true) value = storage.getStringSize(ConcatUtil.undbkey(config), sing);//返回以字符串统计总数的值
 			Map<String,Object> dataMap = ConcatUtil.keyToMap(sing);//读取key信息生成map对象
+			if(value == 0) continue;//跳过
 			dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
 			afterService.processor(millis,config,CommonUtil.copyMap(dataMap), value);//后处理
 		}
