@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.Resource;
 
@@ -17,15 +18,42 @@ import com.love320.stats.storage.IDataBase;
 import com.love320.stats.utils.SQLUtil;
 
 @Service
-public class MysqlDataBase implements IDataBase {
+public class MysqlDataBase implements IDataBase ,Runnable{
 	
 	private static final Logger logger = LoggerFactory.getLogger(MysqlDataBase.class);
 
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
+
+    private static ConcurrentLinkedQueue<Bean> dataSS = new ConcurrentLinkedQueue<Bean>();
+
+    public boolean write(long millis,String table, Map<String, Object> data,int value) {
+        Bean bean = new Bean();
+        bean.millis = millis;
+        bean.table = table;
+        bean.data = data;
+        bean.value = value;
+        dataSS.offer(bean);
+        return false;
+    }
+
+    public void run(){
+        while(true){
+            synchronized(dataSS){
+                while (!dataSS.isEmpty()) {
+                    Bean bean =dataSS.poll();
+                    writeDB(bean.millis,bean.table,bean.data,bean.value);
+                }
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
-	
-	public boolean write(long millis,String table, Map<String, Object> data,int value) {
+	public boolean writeDB(long millis,String table, Map<String, Object> data,int value) {
 		//logger.info(String.format("写入数据成功!-%s", table));
 		Calendar calendar = Calendar.getInstance();//时间
 		calendar.setTimeInMillis(millis);//设置时间
@@ -46,5 +74,12 @@ public class MysqlDataBase implements IDataBase {
 		jdbcTemplate.update(insertSQL);
 		return false;
 	}
+
+    public class Bean{
+        public Map<String, Object> data;
+        public long millis;
+        public String table;
+        public int value;
+    }
 
 }

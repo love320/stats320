@@ -55,20 +55,20 @@ public class Task  implements Job {
 		try { 
 			Thread.sleep (config.getSleep()) ; 
 		} catch (InterruptedException ie){}
-		
+
 		String[] keys = storage.keys(ConcatUtil.undbkey(config));
 		for(String sing:keys){
 			int value = 0;
 			if(config.isIsize() == false) value = storage.getInt(ConcatUtil.undbkey(config), sing);//返回以整数统计信息值
 			if(config.isIsize() == true) value = storage.getStringSize(ConcatUtil.undbkey(config), sing);//返回以字符串统计总数的值
 			Map<String,Object> dataMap = ConcatUtil.keyToMap(sing);//读取key信息生成map对象
-			if(value == 0) continue;//跳过
 			dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
 			afterService.processor(millis,config,CommonUtil.copyMap(dataMap), value);//后处理
 		}
 		
 		//任务完成,清空非活动数据库
 		storage.clean(ConcatUtil.undbkey(config));
+
 	}
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {

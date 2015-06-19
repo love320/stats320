@@ -2,6 +2,7 @@ package com.love320.stats.storage.impl;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -22,7 +23,7 @@ import com.love320.stats.storage.IAfter;
  */
 
 @Service
-public class AfterService implements IAfter {
+public class AfterService implements IAfter ,Runnable{
 	
 	@Autowired
 	private Server server;
@@ -30,30 +31,36 @@ public class AfterService implements IAfter {
 	private CopyOnWriteArrayList<String> srclist = new CopyOnWriteArrayList<String>();
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
+
+    private static ConcurrentLinkedQueue<Map<String, Object>> dataSS = new ConcurrentLinkedQueue<Map<String, Object>>();
 	
 	public boolean processor(long millis,Config config,Map<String, Object> data,int value){
 		for(String sing :srclist){
 			if(sing.equals(config.getIndex())){
 				data.put(sing, sing);
 				data.put("value", Integer.valueOf(value));
-				try {
-					String json = objectMapper.writeValueAsString(data);
-					server.read(objectMapper.readValue(json,Map.class));
-				} catch (JsonGenerationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+                dataSS.offer(data);
 			}
 		}
 		return true;
 	}
+
+    public void run(){
+        while(true){
+            synchronized(dataSS){
+                while (!dataSS.isEmpty()) {
+                    Map<String, Object> data=dataSS.poll();
+                    server.read(data);
+                }
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 	public void addSrcIndex(String index){
 		srclist.add(index);

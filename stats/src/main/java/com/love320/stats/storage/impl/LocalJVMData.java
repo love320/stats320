@@ -1,5 +1,7 @@
 package com.love320.stats.storage.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -80,6 +82,7 @@ public class LocalJVMData implements IStorage {
 	            num +=link.poll();
 	        }
 		}
+        link.offer(num);//从队列中提取数据合并后,把结果再写回.
 		return num.intValue();
 	}
 	
@@ -111,19 +114,17 @@ public class LocalJVMData implements IStorage {
 
 	public boolean clean(String database) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
-		data.clear();
+        synchronized(data){
+            data.clear();
+        }
 		return true;
 	}
 
 	public String[] keys(String database){
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
-		String[] keys = new String[data.size()];
-		int i = 0;
-		for (Entry<String, Object> entry : data.entrySet()){
-			keys[i] = entry.getKey();
-			i++;
-		}
-		return keys;
+        List list = new ArrayList<String>();
+		for (Entry<String, Object> entry : data.entrySet()) list.add(entry.getKey());
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 
 }

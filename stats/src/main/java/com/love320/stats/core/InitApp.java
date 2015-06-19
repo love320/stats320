@@ -76,7 +76,11 @@ public class InitApp {
 			//检查是否有后处理
 			if(!StringUtils.isBlank(sing.getSrcIndex())) afterService.addSrcIndex(sing.getSrcIndex());
 		}
-		
+
+        Thread afterT = new Thread(afterService);
+        afterT.start();
+        Thread mysqlT = new Thread(mysqlDataBase);
+        mysqlT.start();
 		return true;
 	}
 

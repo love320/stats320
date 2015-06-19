@@ -27,7 +27,7 @@ public class MqMsgTest extends TestCase {
 		for(int i = 0 ;i < 200;i++) System.out.println(CommonUtil.generateShortUuid());
 	}
 	
-	public void sendTest(){
+	public void testSend(){
 		ApplicationContext  context = new ClassPathXmlApplicationContext("classpath:spring-root.xml");
 		JmsTemplate jmsTemplate = (JmsTemplate) context.getBean("sendjmstemplate");
 		for(int i=0 ;i<1500;i++) sendMq(jmsTemplate);
@@ -59,13 +59,10 @@ public class MqMsgTest extends TestCase {
 				try {
 					msg = objectMapper.writeValueAsString(sing);
 				} catch (JsonGenerationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return session.createTextMessage(msg);

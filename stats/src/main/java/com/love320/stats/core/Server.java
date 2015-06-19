@@ -24,8 +24,7 @@ public class Server {
 	 */
 	@Autowired
 	private HandlerService handlerService;
-	
-	
+
 	public boolean read(Map<String,Object> map){
 		map.put(Constant.KEYMSG, UUID.randomUUID().toString());//给每一条信息打上标注
 		for(Handler handler:handlerService.handlers()) handler.exe(CommonUtil.copyMap(map));
