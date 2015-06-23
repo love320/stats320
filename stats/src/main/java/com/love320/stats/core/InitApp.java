@@ -77,10 +77,9 @@ public class InitApp {
 			if(!StringUtils.isBlank(sing.getSrcIndex())) afterService.addSrcIndex(sing.getSrcIndex());
 		}
 
-        Thread afterT = new Thread(afterService);
-        afterT.start();
-        Thread mysqlT = new Thread(mysqlDataBase);
-        mysqlT.start();
+        goThread(afterService);
+        goThread(mysqlDataBase);
+
 		return true;
 	}
 
@@ -102,6 +101,15 @@ public class InitApp {
 		}
 		return zbase;
 	}
+
+    /**
+     * 注册使用线程
+     */
+    private boolean goThread(Runnable run){
+        Thread thread = new Thread(run);
+        thread.start();
+        return true;
+    }
 	
 	/**
 	 * 获取配置文件列表
