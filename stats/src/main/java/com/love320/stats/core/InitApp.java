@@ -60,9 +60,7 @@ public class InitApp {
 		
 		for(Config sing:configs){
 			Handler handler = new Handler(sing);
-			
-			localJVMData.initDB(ConcatUtil.undbkey(sing));
-			localJVMData.initDB(ConcatUtil.dbkey(sing));
+
 			handler.setStorage(localJVMData);
 			
 			handler.setFilterService(filterService);
