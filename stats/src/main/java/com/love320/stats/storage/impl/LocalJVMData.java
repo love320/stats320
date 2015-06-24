@@ -18,7 +18,37 @@ public class LocalJVMData implements IStorage {
 	private static final Logger logger = LoggerFactory.getLogger(LocalJVMData.class);
 	
 	private ConcurrentHashMap<String,Object> database = new ConcurrentHashMap<String,Object>();
-	
+
+
+    /**
+     * 缓存池pool
+     */
+    private ConcurrentLinkedQueue<ConcurrentHashMap<String,String>> cacheStrPool = new ConcurrentLinkedQueue<ConcurrentHashMap<String,String>>();
+
+    private ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>> cacheIntPool = new ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>>();
+
+    /**
+     * 从池中取对象
+     * @return
+     */
+    private ConcurrentHashMap<String,String> newCHM(){
+        synchronized(cacheStrPool){
+            if(!cacheStrPool.isEmpty()) return cacheStrPool.poll();
+        }
+        return new ConcurrentHashMap<String,String>();
+    }
+
+    /**
+     * 从池中取对象
+     * @return
+     */
+    private ConcurrentLinkedQueue<Integer> newCLQ(){
+        synchronized(cacheIntPool){
+            if(!cacheIntPool.isEmpty()) return cacheIntPool.poll();
+        }
+        return new ConcurrentLinkedQueue<Integer>();
+    }
+
 	public boolean initDB(String database) {
 		return initDatabase(database) == null;
 	}
@@ -54,7 +84,7 @@ public class LocalJVMData implements IStorage {
 	private ConcurrentLinkedQueue<Integer> getIntValue(ConcurrentHashMap<String,Object> data,String key){
 		ConcurrentLinkedQueue<Integer> link = (ConcurrentLinkedQueue<Integer>) data.get(key);
 		if(link == null){
-			link = new ConcurrentLinkedQueue<Integer>();
+			link = newCLQ();
 			data.put(key, link);
 		}
 		return link;
@@ -89,7 +119,7 @@ public class LocalJVMData implements IStorage {
 	private ConcurrentHashMap<String,String> getStringValue(ConcurrentHashMap<String,Object> data,String key){
 		ConcurrentHashMap<String,String> hashmap = (ConcurrentHashMap<String,String>) data.get(key);
 		if(hashmap == null){
-			hashmap = new ConcurrentHashMap<String,String>();
+			hashmap = newCHM();
 			data.put(key, hashmap);
 		}
 		return hashmap;
@@ -113,8 +143,24 @@ public class LocalJVMData implements IStorage {
 	}
 
 	public boolean clean(String database) {
-		ConcurrentHashMap<String,Object> data = getDatabase(database);
+		ConcurrentHashMap<String,Object> data = getDatabase(database);//获取被清理缓存数据对象
         synchronized(data){
+            //遍例map所有key-obj
+            for (Entry<String, Object> entry : data.entrySet()){
+                Object obj = data.get(entry.getKey());
+                //判断为ConcurrentHashMap对象
+                if(obj instanceof ConcurrentHashMap){
+                    ConcurrentHashMap<String,String> temp = (ConcurrentHashMap<String,String>)obj;
+                    temp.clear();//清空,初始化
+                    cacheStrPool.offer(temp);//加入池队列
+                }
+                //判断为ConcurrentLinkedQueue对象
+                if(obj instanceof ConcurrentLinkedQueue){
+                    ConcurrentLinkedQueue<Integer> temp = (ConcurrentLinkedQueue<Integer>)obj;
+                    temp.clear();//清空,初始化
+                    cacheIntPool.offer(temp);//加入池队列
+                }
+            }
             data.clear();
         }
 		return true;
