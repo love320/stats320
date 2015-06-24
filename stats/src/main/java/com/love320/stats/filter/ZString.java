@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 
 
-public class ZString implements Zbase {
+public class ZString implements ZBase {
 	
 	private String name;
 	

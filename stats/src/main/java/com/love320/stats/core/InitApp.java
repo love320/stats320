@@ -7,16 +7,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.PostConstruct;
 
+import com.love320.stats.filter.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.love320.stats.filter.FilterService;
-import com.love320.stats.filter.ZInteger;
-import com.love320.stats.filter.ZString;
-import com.love320.stats.filter.Zbase;
 import com.love320.stats.handler.Handler;
 import com.love320.stats.handler.HandlerService;
 import com.love320.stats.storage.impl.AfterService;
@@ -89,14 +86,15 @@ public class InitApp {
 	 * @param config
 	 * @return
 	 */
-	private CopyOnWriteArrayList<Zbase> filters(Config config){
-		CopyOnWriteArrayList<Zbase> zbase = new CopyOnWriteArrayList<Zbase>();
+	private CopyOnWriteArrayList<ZBase> filters(Config config){
+		CopyOnWriteArrayList<ZBase> zbase = new CopyOnWriteArrayList<ZBase>();
 		List<String> filters = config.getFilters();
 		for(String sing:filters){
-			String[] strs = StringUtils.split(sing,Constant.COLONS);
-			if(strs.length == 2){
-				if(strs[0].equals("S")) zbase.add(new ZString(strs[1]));
-				if(strs[0].equals("I")) zbase.add(new ZInteger(strs[1]));
+			String[] strS = StringUtils.split(sing,Constant.COLONS);
+			if(strS.length == 2){
+				if(strS[0].equals("S")) zbase.add(new ZString(strS[1]));
+				if(strS[0].equals("I")) zbase.add(new ZInteger(strS[1]));
+                if(strS[0].equals("N")) zbase.add(new ZNull(strS[1]));
 			}
 		}
 		return zbase;

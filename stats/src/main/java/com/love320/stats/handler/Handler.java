@@ -1,18 +1,16 @@
 package com.love320.stats.handler;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.love320.stats.filter.ZBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.love320.stats.core.Config;
 import com.love320.stats.filter.FilterService;
-import com.love320.stats.filter.Zbase;
 import com.love320.stats.storage.IStorage;
-import com.love320.stats.task.Task;
 import com.love320.stats.utils.ConcatUtil;
 
 public class Handler {
@@ -49,8 +47,8 @@ public class Handler {
 	 * @return
 	 */
 	public boolean exe(Map<String,Object> map){
-		CopyOnWriteArrayList<Zbase> filters = filterService.filtersByIndex(config);//过滤
-		for(Zbase sing:filters) if(sing.isValid(map.get(sing.name()))) return false;//执行过滤
+		CopyOnWriteArrayList<ZBase> filters = filterService.filtersByIndex(config);//过滤
+		for(ZBase sing:filters) if(sing.isValid(map.get(sing.name()))) return false;//执行过滤
 		String key = ConcatUtil.key(config, map);//生成key
 		if(config.isIsize()) storage.setString(ConcatUtil.dbkey(config), key, String.valueOf(map.get(config.getValue()).toString()));
 		if(!config.isIsize()) storage.setInt(ConcatUtil.dbkey(config), key, Integer.valueOf(map.get(config.getValue()).toString()));

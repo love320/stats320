@@ -47,12 +47,15 @@ public class AfterService implements IAfter ,Runnable{
 
     public void run(){
         while(true){
-            synchronized(dataSS){
-                while (!dataSS.isEmpty()) {
-                    Map<String, Object> data=dataSS.poll();
-                    server.read(data);
+                boolean isGo = true;
+                while (isGo) {
+                    Map<String, Object> data = null;
+                    synchronized(dataSS) {
+                        isGo = !dataSS.isEmpty();
+                        if(isGo == true) data = dataSS.poll();
+                    }
+                    if(data != null) server.read(data);
                 }
-            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

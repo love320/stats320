@@ -11,7 +11,7 @@ public class FilterService {
 	/**
 	 * 存储过滤组信息,使用map存放
 	 */
-	private ConcurrentHashMap<String,CopyOnWriteArrayList<Zbase>> filterMap = new ConcurrentHashMap<String,CopyOnWriteArrayList<Zbase>>();
+	private ConcurrentHashMap<String,CopyOnWriteArrayList<ZBase>> filterMap = new ConcurrentHashMap<String,CopyOnWriteArrayList<ZBase>>();
 	
 	
 	/**
@@ -19,7 +19,7 @@ public class FilterService {
 	 * @param config
 	 * @return
 	 */
-	public CopyOnWriteArrayList<Zbase> filtersByIndex(Config config){
+	public CopyOnWriteArrayList<ZBase> filtersByIndex(Config config){
 		return filterMap.get(config.getIndex());
 	}
 	
@@ -29,7 +29,7 @@ public class FilterService {
 	 * @param filters
 	 * @return
 	 */
-	public boolean add(Config config,CopyOnWriteArrayList<Zbase> filters){
+	public boolean add(Config config,CopyOnWriteArrayList<ZBase> filters){
 		filterMap.put(config.getIndex(), filters);
 		return true;
 	}

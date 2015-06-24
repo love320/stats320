@@ -1,6 +1,6 @@
 package com.love320.stats.filter;
 
-public interface Zbase {
+public interface ZBase {
 	
 	/**
 	 * true=无效

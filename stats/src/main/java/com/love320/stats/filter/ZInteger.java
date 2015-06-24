@@ -1,7 +1,7 @@
 package com.love320.stats.filter;
 
 
-public class ZInteger implements Zbase {
+public class ZInteger implements ZBase {
 	
 	private String name;
 	
