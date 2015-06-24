@@ -60,7 +60,6 @@ public class Config {
 	
 	/**
 	 * 获取信息时间Cron
-	 * @return
 	 */
 	private String cron;
 	
@@ -71,7 +70,6 @@ public class Config {
 	
 	/**
 	 * 持久存储的表
-	 * @return
 	 */
 	private String table;
 

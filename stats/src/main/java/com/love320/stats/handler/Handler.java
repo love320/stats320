@@ -5,13 +5,12 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.love320.stats.filter.ZBase;
+import com.love320.stats.utils.KeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.love320.stats.core.Config;
 import com.love320.stats.filter.FilterService;
 import com.love320.stats.storage.IStorage;
-import com.love320.stats.utils.ConcatUtil;
 
 public class Handler {
 	
@@ -43,15 +42,15 @@ public class Handler {
 	
 	/**
 	 * 处理
-	 * @param map
-	 * @return
+	 * @param map 数据
+	 * @return 真 假
 	 */
 	public boolean exe(Map<String,Object> map){
 		CopyOnWriteArrayList<ZBase> filters = filterService.filtersByIndex(config);//过滤
 		for(ZBase sing:filters) if(sing.isValid(map.get(sing.name()))) return false;//执行过滤
-		String key = ConcatUtil.key(config, map);//生成key
-		if(config.isIsize()) storage.setString(ConcatUtil.dbkey(config), key, String.valueOf(map.get(config.getValue()).toString()));
-		if(!config.isIsize()) storage.setInt(ConcatUtil.dbkey(config), key, Integer.valueOf(map.get(config.getValue()).toString()));
+		String key = KeyUtil.key(config, map);//生成key
+		if(config.isIsize()) storage.setString(KeyUtil.dbKey(config), key, String.valueOf(map.get(config.getValue()).toString()));
+		if(!config.isIsize()) storage.setInt(KeyUtil.dbKey(config), key, Integer.valueOf(map.get(config.getValue()).toString()));
 		return true;
 	}
 

@@ -7,19 +7,22 @@ import org.apache.commons.lang3.StringUtils;
 import com.love320.stats.core.Config;
 import com.love320.stats.core.Constant;
 
-public class ConcatUtil {
+/**
+ * 索引工具
+ */
+public class KeyUtil {
 	
 	
 	/**
 	 * 拼接可存储的key
-	 * @param config
-	 * @param map
-	 * @return
+	 * @param config 配置
+	 * @param map 数据
+	 * @return 字符串
 	 */
 	public static String key(Config config,Map<String,Object> map){
 		List<String> columns = config.getColumns();
 		StringBuilder sb = new StringBuilder();
-		sb.append(dbkey(config));//加入头,数据库
+		sb.append(dbKey(config));//加入头,数据库
 		for(String sing:columns){
 			String[] strs = StringUtils.split(sing, Constant.COLON);
 			if(strs.length == 2){
@@ -31,28 +34,28 @@ public class ConcatUtil {
 	
 	/**
 	 * 生成数据库的key
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 字符串
 	 */
-	public static String dbkey(Config config){
-		return dbkey(config,config.isMaster());
+	public static String dbKey(Config config){
+		return dbKey(config,config.isMaster());
 	}
 	
 	/**
 	 * 非活动的数据库的key
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 字符串
 	 */
-	public static String undbkey(Config config){
-		return dbkey(config,!config.isMaster());
+	public static String unDBKey(Config config){
+		return dbKey(config,!config.isMaster());
 	}
 	
 	/**
 	 * 生成数据库的key
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 字符串
 	 */
-	public static String dbkey(Config config,boolean isMaster){
+	public static String dbKey(Config config,boolean isMaster){
 		return String.format("%s#%d", config.getIndex(),isMaster?1:2);
 	}
 	

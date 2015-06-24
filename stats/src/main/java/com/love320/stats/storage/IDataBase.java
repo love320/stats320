@@ -4,8 +4,7 @@ import java.util.Map;
 
 /**
  * 统计数据持久
- * @author z{user}d
- *
+ * @author zd
  */
 public interface IDataBase {
 	

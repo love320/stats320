@@ -1,6 +1,8 @@
 package com.love320.stats.filter;
 
-
+/**
+ * 整形过滤器
+ */
 public class ZInteger implements ZBase {
 	
 	private String name;

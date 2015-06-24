@@ -1,7 +1,6 @@
 package com.love320.stats.storage.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -20,12 +19,12 @@ import com.love320.stats.utils.SQLUtil;
 @Service
 public class MysqlDataBase implements IDataBase ,Runnable{
 	
-	private static final Logger logger = LoggerFactory.getLogger(MysqlDataBase.class);
+	private Logger logger = LoggerFactory.getLogger(MysqlDataBase.class);
 
 	@Resource(name="jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
 
-    private static ConcurrentLinkedQueue<Bean> dataSS = new ConcurrentLinkedQueue<Bean>();
+    private static final ConcurrentLinkedQueue<Bean> dataSS = new ConcurrentLinkedQueue<Bean>();
 
     public boolean write(long millis,String table, Map<String, Object> data,int value) {
         Bean bean = new Bean();
@@ -70,7 +69,7 @@ public class MysqlDataBase implements IDataBase ,Runnable{
 		}
 		
 		String insertSQL = String.format("insert into %s (%s) VALUES (%s) ", table,names,values);
-		//logger.info(insertSQL);
+        logger.debug(insertSQL);
 		jdbcTemplate.update(insertSQL);
 		return false;
 	}

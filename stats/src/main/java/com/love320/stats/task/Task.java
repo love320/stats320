@@ -3,6 +3,7 @@ package com.love320.stats.task;
 
 import java.util.Map;
 
+import com.love320.stats.utils.KeyUtil;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -15,7 +16,6 @@ import com.love320.stats.storage.IAfter;
 import com.love320.stats.storage.IDataBase;
 import com.love320.stats.storage.IStorage;
 import com.love320.stats.utils.CommonUtil;
-import com.love320.stats.utils.ConcatUtil;
 
 
 /**
@@ -54,20 +54,22 @@ public class Task  implements Job {
 		//程序休息一下.等待完成更换数据库成功.
 		try { 
 			Thread.sleep (config.getSleep()) ; 
-		} catch (InterruptedException ie){}
+		} catch (InterruptedException ie){
+            ie.printStackTrace();
+        }
 
-		String[] keys = storage.keys(ConcatUtil.undbkey(config));
+		String[] keys = storage.keys(KeyUtil.unDBKey(config));
 		for(String sing:keys){
 			int value = 0;
-			if(config.isIsize() == false) value = storage.getInt(ConcatUtil.undbkey(config), sing);//返回以整数统计信息值
-			if(config.isIsize() == true) value = storage.getStringSize(ConcatUtil.undbkey(config), sing);//返回以字符串统计总数的值
-			Map<String,Object> dataMap = ConcatUtil.keyToMap(sing);//读取key信息生成map对象
+			if(config.isIsize() == false) value = storage.getInt(KeyUtil.unDBKey(config), sing);//返回以整数统计信息值
+			if(config.isIsize() == true) value = storage.getStringSize(KeyUtil.unDBKey(config), sing);//返回以字符串统计总数的值
+			Map<String,Object> dataMap = KeyUtil.keyToMap(sing);//读取key信息生成map对象
 			dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
 			afterService.processor(millis,config,CommonUtil.copyMap(dataMap), value);//后处理
 		}
 		
 		//任务完成,清空非活动数据库
-		storage.clean(ConcatUtil.undbkey(config));
+		storage.clean(KeyUtil.unDBKey(config));
 
 	}
 

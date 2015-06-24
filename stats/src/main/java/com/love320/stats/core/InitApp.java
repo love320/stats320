@@ -20,7 +20,6 @@ import com.love320.stats.storage.impl.AfterService;
 import com.love320.stats.storage.impl.LocalJVMData;
 import com.love320.stats.storage.impl.MysqlDataBase;
 import com.love320.stats.task.TaskService;
-import com.love320.stats.utils.ConcatUtil;
 
 /**
  * 初始化配置信息
@@ -31,7 +30,7 @@ import com.love320.stats.utils.ConcatUtil;
 @Service
 public class InitApp {
 	
-	private static final Logger logger = LoggerFactory.getLogger(InitApp.class);
+	private static Logger logger = LoggerFactory.getLogger(InitApp.class);
 	
 	@Autowired
 	private FilterService filterService;
@@ -81,8 +80,8 @@ public class InitApp {
 	
 	/**
 	 * 初始过滤实体
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 过滤对象
 	 */
 	private CopyOnWriteArrayList<ZBase> filters(Config config){
 		CopyOnWriteArrayList<ZBase> zbase = new CopyOnWriteArrayList<ZBase>();
@@ -109,7 +108,7 @@ public class InitApp {
 	
 	/**
 	 * 获取配置文件列表
-	 * @return
+	 * @return 配置列表
 	 */
 	private List<Config> configList() {
 		List<Config> cs = new ArrayList<Config>();
@@ -121,8 +120,8 @@ public class InitApp {
 	}
 
 	/**
-	 * 统计pv 10分钟
-	 * @return
+	 * 统计pv 15秒
+	 * @return 配置对象
 	 */
 	private Config configPv10() {
 		Config config = new Config();
@@ -140,8 +139,8 @@ public class InitApp {
 	}
 	
 	/**
-	 * 统计pv 10分钟
-	 * @return
+	 * 统计pv 50秒
+	 * @return 配置对象
 	 */
 	private Config configPvSrc10() {
 		Config config = new Config();
@@ -158,7 +157,11 @@ public class InitApp {
 		config.setTable("statsTables_PV_hour");
 		return config;
 	}
-	
+
+    /**
+     * 统计pv 2分钟
+     * @return 配置对象
+     */
 	private Config configPvSrcMin() {
 		Config config = new Config();
 		config.setIndex("VHX9Nr22");
@@ -176,8 +179,8 @@ public class InitApp {
 	}
 	
 	/**
-	 * 统计uv 30分钟
-	 * @return
+	 * 统计uv 20秒
+	 * @return 配置对象
 	 */
 	private Config configUv30() {
 		Config config = new Config();

@@ -1,5 +1,8 @@
 package com.love320.stats.core;
 
+/**
+ * 常量
+ */
 public class Constant {
 	
 	/**

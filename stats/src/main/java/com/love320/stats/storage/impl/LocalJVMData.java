@@ -14,22 +14,25 @@ import com.love320.stats.storage.IStorage;
 
 @Service
 public class LocalJVMData implements IStorage {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(LocalJVMData.class);
-	
+
 	private ConcurrentHashMap<String,Object> database = new ConcurrentHashMap<String,Object>();
 
 
     /**
-     * 缓存池pool
+     * 缓存池pool String类型
      */
-    private ConcurrentLinkedQueue<ConcurrentHashMap<String,String>> cacheStrPool = new ConcurrentLinkedQueue<ConcurrentHashMap<String,String>>();
+    private final ConcurrentLinkedQueue<ConcurrentHashMap<String,String>> cacheStrPool = new ConcurrentLinkedQueue<ConcurrentHashMap<String,String>>();
 
-    private ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>> cacheIntPool = new ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>>();
+    /**
+     *缓存池pool Integer类型
+     */
+    private final ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>> cacheIntPool = new ConcurrentLinkedQueue<ConcurrentLinkedQueue<Integer>>();
 
     /**
      * 从池中取对象
-     * @return
+     * @return 对象
      */
     private ConcurrentHashMap<String,String> newCHM(){
         synchronized(cacheStrPool){
@@ -40,7 +43,7 @@ public class LocalJVMData implements IStorage {
 
     /**
      * 从池中取对象
-     * @return
+     * @return 对象
      */
     private ConcurrentLinkedQueue<Integer> newCLQ(){
         synchronized(cacheIntPool){
@@ -55,19 +58,25 @@ public class LocalJVMData implements IStorage {
 	
 	/**
 	 * 初始数据库
-	 * @param index
-	 * @return
+	 * @param index 索引
+	 * @return 对象
 	 */
-	private ConcurrentHashMap<String,Object> initDatabase(String index){
+	private synchronized ConcurrentHashMap<String,Object> initDatabase(String index){
+
+        ConcurrentHashMap<String,Object> data = (ConcurrentHashMap<String, Object>) database.get(index);
+        if(data != null) return data;//返回
+
+        //初始化数据库
 		ConcurrentHashMap<String,Object> newDatabase = new ConcurrentHashMap<String,Object>();
 		database.put(index, newDatabase);
+        logger.info("初始数据库:"+index);
 		return newDatabase;
 	}
 	
 	/**
 	 * 获取数据库
-	 * @param index
-	 * @return
+	 * @param index 索引
+	 * @return 对象
 	 */
 	private ConcurrentHashMap<String,Object> getDatabase(String index){
 		ConcurrentHashMap<String,Object> data = (ConcurrentHashMap<String, Object>) database.get(index);
@@ -77,16 +86,16 @@ public class LocalJVMData implements IStorage {
 	
 	/**
 	 * 从指定数据库对象中查找对应的key的对象
-	 * @param data
-	 * @param key
-	 * @return
+	 * @param data 数据库
+	 * @param key 索引
+	 * @return 查找队列
 	 */
 	private ConcurrentLinkedQueue<Integer> getIntValue(ConcurrentHashMap<String,Object> data,String key){
 		ConcurrentLinkedQueue<Integer> link = (ConcurrentLinkedQueue<Integer>) data.get(key);
 		if(link == null){
 			link = newCLQ();
-			data.put(key, link);
-		}
+            data.put(key, link);
+        }
 		return link;
 	}
 	
@@ -113,16 +122,16 @@ public class LocalJVMData implements IStorage {
 	        }
 		}
         link.offer(num);//从队列中提取数据合并后,把结果再写回.
-		return num.intValue();
+		return num;
 	}
 	
 	private ConcurrentHashMap<String,String> getStringValue(ConcurrentHashMap<String,Object> data,String key){
-		ConcurrentHashMap<String,String> hashmap = (ConcurrentHashMap<String,String>) data.get(key);
-		if(hashmap == null){
-			hashmap = newCHM();
-			data.put(key, hashmap);
+		ConcurrentHashMap<String,String> hashMap = (ConcurrentHashMap<String,String>) data.get(key);
+		if(hashMap == null){
+            hashMap = newCHM();
+			data.put(key, hashMap);
 		}
-		return hashmap;
+		return hashMap;
 	}
 
 	/**
@@ -144,6 +153,7 @@ public class LocalJVMData implements IStorage {
 
 	public boolean clean(String database) {
 		ConcurrentHashMap<String,Object> data = getDatabase(database);//获取被清理缓存数据对象
+        //锁定数据库
         synchronized(data){
             //遍例map所有key-obj
             for (Entry<String, Object> entry : data.entrySet()){
@@ -161,16 +171,22 @@ public class LocalJVMData implements IStorage {
                     cacheIntPool.offer(temp);//加入池队列
                 }
             }
+            //清空数据
             data.clear();
         }
 		return true;
 	}
 
+    /**
+     * 获取指定数据库的所有key
+     * @param database 数据库的索引
+     * @return String[] 返回所有keys
+     */
 	public String[] keys(String database){
 		ConcurrentHashMap<String,Object> data = getDatabase(database);
-        List list = new ArrayList<String>();
-		for (Entry<String, Object> entry : data.entrySet()) list.add(entry.getKey());
-		return (String[]) list.toArray(new String[list.size()]);
+        List<String> list = new ArrayList<String>();
+		for (Entry<String, Object> entry : data.entrySet())  list.add(entry.getKey());
+		return list.toArray(new String[list.size()]);
 	}
 
 }

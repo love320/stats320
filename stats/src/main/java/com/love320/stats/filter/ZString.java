@@ -3,7 +3,9 @@ package com.love320.stats.filter;
 import org.apache.commons.lang3.StringUtils;
 
 
-
+/**
+ * 字符串过滤器
+ */
 public class ZString implements ZBase {
 	
 	private String name;

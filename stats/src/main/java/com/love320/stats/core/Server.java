@@ -18,12 +18,9 @@ import com.love320.stats.utils.CommonUtil;
 
 @Service
 public class Server {
-	
-	/**
-	 * handler服务.处理
-	 */
+
 	@Autowired
-	private HandlerService handlerService;
+	private HandlerService handlerService;// handler服务.处理
 
 	public boolean read(Map<String,Object> map){
 		map.put(Constant.KEYMSG, UUID.randomUUID().toString());//给每一条信息打上标注

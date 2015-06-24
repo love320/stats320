@@ -16,8 +16,8 @@ public class FilterService {
 	
 	/**
 	 * 从指定的配置文件索引中获取对应的过滤器组
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 对象
 	 */
 	public CopyOnWriteArrayList<ZBase> filtersByIndex(Config config){
 		return filterMap.get(config.getIndex());
@@ -25,9 +25,9 @@ public class FilterService {
 	
 	/**
 	 * 添加
-	 * @param config
-	 * @param filters
-	 * @return
+	 * @param config 对象
+	 * @param filters 过滤
+	 * @return 对象
 	 */
 	public boolean add(Config config,CopyOnWriteArrayList<ZBase> filters){
 		filterMap.put(config.getIndex(), filters);
@@ -36,8 +36,8 @@ public class FilterService {
 	
 	/**
 	 * 移除
-	 * @param config
-	 * @return
+	 * @param config 配置
+	 * @return 对象
 	 */
 	public boolean remove(Config config){
 		filterMap.remove(config.getIndex());

@@ -34,7 +34,7 @@ public class TaskService {
 	
 	/**
 	 * 初始化时间任务
-	 * @return
+	 * @return 真 假
 	 */
 	@PostConstruct
 	public boolean initQuartz() {

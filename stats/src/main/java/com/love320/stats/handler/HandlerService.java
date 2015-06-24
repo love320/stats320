@@ -23,8 +23,8 @@ public class HandlerService {
 	
 	/**
 	 * 添加处理
-	 * @param handler
-	 * @return
+	 * @param handler 处理器
+	 * @return 真 假
 	 */
 	public boolean add(Handler handler){
 		handlers.add(handler);
@@ -33,8 +33,8 @@ public class HandlerService {
 	
 	/**
 	 * 移除handler
-	 * @param handler
-	 * @return
+	 * @param handler 处理器
+	 * @return 真 假
 	 */
 	public boolean remove(Handler handler){
 		handlers.remove(handler);
@@ -43,8 +43,8 @@ public class HandlerService {
 	
 	/**
 	 * 查找handler
-	 * @param handler
-	 * @return
+	 * @param handler 处理器
+	 * @return 真 假
 	 */
 	public Handler find(Handler handler){
 		return find(handler.getIndex());
