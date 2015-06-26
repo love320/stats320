@@ -61,10 +61,10 @@ public class Task  implements Job {
 		String[] keys = storage.keys(KeyUtil.unDBKey(config));
 		for(String sing:keys){
 			int value = 0;
-			if(config.isIsize() == false) value = storage.getInt(KeyUtil.unDBKey(config), sing);//返回以整数统计信息值
-			if(config.isIsize() == true) value = storage.getStringSize(KeyUtil.unDBKey(config), sing);//返回以字符串统计总数的值
+			if(config.isWayFT() == false) value = storage.getInt(KeyUtil.unDBKey(config), sing);//返回以整数统计信息值
+			if(config.isWayFT() == true) value = storage.getStringSize(KeyUtil.unDBKey(config), sing);//返回以字符串统计总数的值
 			Map<String,Object> dataMap = KeyUtil.keyToMap(sing);//读取key信息生成map对象
-			dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
+			if(config.isToDB() == true) dataBase.write(millis,config.getTable(),CommonUtil.copyMap(dataMap),value);//持久化保存
 			afterService.processor(millis,config,CommonUtil.copyMap(dataMap), value);//后处理
 		}
 		

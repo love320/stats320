@@ -28,13 +28,20 @@ public class Config {
 	 * 写入数据到库字段
 	 */
 	private List<String> columns;
-	
+
 	/**
 	 * 持久存储的方式
 	 * false:浮点[ConcurrentLinkedQueue]-
 	 * true:字符[ConcurrentHashMap]
 	 */
-	private boolean isize = true;
+	private boolean wayFT = true;
+
+    /**
+     * 持久到DB中
+     * false:不进入DB
+     * true:进入DB
+     */
+    private boolean toDB = false;
 	
 	/**
 	 * 数据的类型
@@ -89,13 +96,7 @@ public class Config {
 		this.columns = columns;
 	}
 
-	public boolean isIsize() {
-		return isize;
-	}
 
-	public void setIsize(boolean isize) {
-		this.isize = isize;
-	}
 
 	public int getType() {
 		return type;
@@ -161,10 +162,20 @@ public class Config {
 	public void setSrcIndex(String srcIndex) {
 		this.srcIndex = srcIndex;
 	}
-	
-	
-	
-	
-	
-	
+
+    public boolean isWayFT() {
+        return wayFT;
+    }
+
+    public void setWayFT(boolean wayFT) {
+        this.wayFT = wayFT;
+    }
+
+    public boolean isToDB() {
+        return toDB;
+    }
+
+    public void setToDB(boolean toDB) {
+        this.toDB = toDB;
+    }
 }

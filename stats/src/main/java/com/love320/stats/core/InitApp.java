@@ -128,13 +128,14 @@ public class InitApp {
 		config.setIndex("jWhn48iO");
 		String[] filters = { "S:mid", "S:version", "S:appId", "I:calcCount" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
-		config.setIsize(false);
+		config.setWayFT(false);
 		config.setValue("calcCount");
 		String[] columns = { "S:channel", "S:version", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/15 * * * * ?");
 		config.setSleep(3000);
-		config.setTable("statsTables_PV");
+        //config.setTable("statsTables_PV");
+        config.setToDB(false);//不写入DB
 		return config;
 	}
 	
@@ -148,13 +149,14 @@ public class InitApp {
 		config.setSrcIndex("jWhn48iO");
 		String[] filters = { "S:jWhn48iO"};// 过滤字段
 		config.setFilters(Arrays.asList(filters));
-		config.setIsize(false);
+		config.setWayFT(false);
 		config.setValue("value");
 		String[] columns = { "S:channel", "S:version", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/50 * * * * ?");
 		config.setSleep(3000);
 		config.setTable("statsTables_PV_hour");
+        config.setToDB(true);//写入DB
 		return config;
 	}
 
@@ -168,13 +170,14 @@ public class InitApp {
 		config.setSrcIndex("BPqlPV4N");
 		String[] filters = { "S:BPqlPV4N"};// 过滤字段
 		config.setFilters(Arrays.asList(filters));
-		config.setIsize(false);
+		config.setWayFT(false);
 		config.setValue("value");
 		String[] columns = { "S:channel", "S:version", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("2 0/2 * * * ?");
 		config.setSleep(3000);
 		config.setTable("statsTables_PV_Min");
+        config.setToDB(true);//写入DB
 		return config;
 	}
 	
@@ -187,13 +190,14 @@ public class InitApp {
 		config.setIndex("i5ZjweSq");
 		String[] filters = { "S:mid", "S:appId" };// 过滤字段
 		config.setFilters(Arrays.asList(filters));
-		config.setIsize(true);
+		config.setWayFT(true);
 		config.setValue("mid");
 		String[] columns = { "S:channel", "S:appId" };
 		config.setColumns(Arrays.asList(columns));
 		config.setCron("0/20 * * * * ?");
 		config.setSleep(3000);
 		config.setTable("statsTables_UV");
+        config.setToDB(true);//写入DB
 		return config;
 	}
 	

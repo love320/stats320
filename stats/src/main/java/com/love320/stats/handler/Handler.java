@@ -49,8 +49,8 @@ public class Handler {
 		CopyOnWriteArrayList<ZBase> filters = filterService.filtersByIndex(config);//过滤
 		for(ZBase sing:filters) if(sing.isValid(map.get(sing.name()))) return false;//执行过滤
 		String key = KeyUtil.key(config, map);//生成key
-		if(config.isIsize()) storage.setString(KeyUtil.dbKey(config), key, String.valueOf(map.get(config.getValue()).toString()));
-		if(!config.isIsize()) storage.setInt(KeyUtil.dbKey(config), key, Integer.valueOf(map.get(config.getValue()).toString()));
+		if(config.isWayFT()) storage.setString(KeyUtil.dbKey(config), key, String.valueOf(map.get(config.getValue()).toString()));
+		if(!config.isWayFT()) storage.setInt(KeyUtil.dbKey(config), key, Integer.valueOf(map.get(config.getValue()).toString()));
 		return true;
 	}
 
