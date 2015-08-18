@@ -74,8 +74,9 @@ public class TaskService {
 	
 	public boolean remove(Config config){
 		try {
-			scheduler.unscheduleJob(new TriggerKey(String.format("%s-Trigger",config.getIndex()), "groupTrigger"));
-			scheduler.deleteJob(new JobKey(String.format("%s-Job",config.getIndex()), "groupJob")); 
+            scheduler.pauseTrigger(new TriggerKey(String.format("%s-Trigger",config.getIndex()), "groupTrigger"));//停止
+			scheduler.unscheduleJob(new TriggerKey(String.format("%s-Trigger",config.getIndex()), "groupTrigger"));//移除触发器
+			scheduler.deleteJob(new JobKey(String.format("%s-Job",config.getIndex()), "groupJob")); //删除任务
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
